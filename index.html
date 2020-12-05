@@ -1,0 +1,113 @@
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .inner-container {
+        display: grid;
+    }
+
+    ul {
+        display: flex;
+        padding: 0;
+    }
+
+    li {
+        margin: 0 20px;
+        list-style: none;
+        padding: 0;
+    }
+
+    #error-message {
+        border-radius: 5px;
+        background: tomato;
+        padding: 0.5rem;
+        display:none;
+    }
+
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    textarea {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-size: large
+    }
+</style>
+<div class="container">
+    <h1>Contract Express code indenter!</h1>
+    <ul>
+        <li>
+            <div class="inner-container">
+                <label for="code-input">Your input here:</label>
+                <textarea name="Your input here" id="code-input" cols="30" rows="10"
+                    onkeyup="javascript:codeFormatter(this.value)"
+                    placeholder="function1(function2(var))"
+                    ></textarea>
+            </div>
+        </li>
+        <li>
+            <div class="inner-container">
+                <label for="code-output">Your output will appear here:</label>
+                <textarea name="Your output here" id="code-ouput" cols="30" rows="10" readonly></textarea>
+            </div>
+        </li>
+    </ul>
+    <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
+    <button onclick="javascript:selectOutput()">Select output text</button>
+</div>
+<script>
+    function codeFormatter(text) {
+
+        // format text appropriately
+
+        // get rid of all extra spaces, newlines, tabs
+        let clean_text = text.replace(/[\n\t]/, "").split("");
+
+        // set the indent level
+        let indent = 0;
+        let output = "";
+        let error_message = "";
+
+        clean_text.forEach(character => {
+            if (character == "(") {
+                indent += 4;
+                output += "(" + "\n" + " ".repeat(indent);
+            } else if (character == ")") {
+                indent -= 4;
+                if (indent >= 0) {
+                    output += "\n" + " ".repeat(indent) + ")";
+                } else {
+                    error_message = "Your code has too many closing brackets. It has <strong>" + Math.abs(indent) / 4 + "</strong> extra closing bracket(s)."
+                }
+
+            } else {
+                output += character;
+            }
+        })
+
+        if (indent > 0) {
+            error_message = "Your code is missing some closing brackets. It is missing <strong>" + indent / 4 + "</strong> closing bracket(s)."
+        }
+
+        document.querySelector('#code-ouput').value = output
+        if (error_message != "") {
+            document.querySelector('#error-message').innerHTML = error_message;
+            document.querySelector('#error-message').style.display = 'block';
+        } else {
+            document.querySelector('#error-message').innerHTML = '';
+            document.querySelector('#error-message').style.display = 'none';
+        }
+    }
+
+    function selectOutput() {
+        document.querySelector('#code-ouput').select()
+    }
+</script>
