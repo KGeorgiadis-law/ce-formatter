@@ -42,32 +42,33 @@
         font-size: large
     }
 
+    footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: salmon;
+        color: black;
+        text-align: center;
+    }
+
     @media (max-width: 800px) {
         ul {
             flex-direction: column;
         }
+
+        footer {
+            position: relative;
+        }
+
+        footer p {
+            margin: 0;
+        }
     }
+
+    
 </style>
-<div class="container">
-    <h1>Contract Express code indenter!</h1>
-    <ul>
-        <li>
-            <div class="inner-container">
-                <label for="code-input">Your input here:</label>
-                <textarea name="Your input here" id="code-input" cols="30" rows="10"
-                    onkeyup="javascript:codeFormatter(this.value)" placeholder="function1(function2(var))"></textarea>
-            </div>
-        </li>
-        <li>
-            <div class="inner-container">
-                <label for="code-output">Your output will appear here:</label>
-                <textarea name="Your output here" id="code-ouput" cols="30" rows="10" readonly></textarea>
-            </div>
-        </li>
-    </ul>
-    <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
-    <button onclick="javascript:selectOutput()">Select output text</button>
-</div>
+
 <script>
     function codeFormatter(text) {
 
@@ -116,3 +117,39 @@
         document.querySelector('#code-ouput').select()
     }
 </script>
+<html>
+
+<head>
+    <title>Code indenter</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contract Express code indenter!</h1>
+        <ul>
+            <li>
+                <div class="inner-container">
+                    <label for="code-input">Your input here:</label>
+                    <textarea name="Your input here" id="code-input" cols="30" rows="10"
+                        onkeyup="javascript:codeFormatter(this.value)"
+                        placeholder="function1(function2(var))"></textarea>
+                </div>
+            </li>
+            <li>
+                <div class="inner-container">
+                    <label for="code-output">Your output will appear here:</label>
+                    <textarea name="Your output here" id="code-ouput" cols="30" rows="10" readonly></textarea>
+                </div>
+            </li>
+        </ul>
+        <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
+        <button onclick="javascript:selectOutput()">Select output text</button>
+    </div>
+    <footer>
+        <p>Made by <a href="https://github.com/KGeorgiadis-law">Konstantinos Georgiadis</a> under MIT License. Source code <a
+                href="https://github.com/KGeorgiadis-law/contract-express-formatter">here</a>.</p>
+    </footer>
+</body>
+
+</html>
