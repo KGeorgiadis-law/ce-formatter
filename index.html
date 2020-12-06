@@ -91,7 +91,7 @@
                 if (indent >= 0) {
                     output += "\n" + " ".repeat(indent) + ")";
                 } else {
-                    error_message = "Your code has too many closing brackets. It has <strong>" + Math.abs(indent) / 4 + "</strong> extra closing bracket(s)."
+                    error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / 4 + " extra</strong> closing bracket(s)."
                 }
 
             } else {
@@ -100,7 +100,7 @@
         })
 
         if (indent > 0) {
-            error_message = "Your code is missing some closing brackets. It is missing <strong>" + indent / 4 + "</strong> closing bracket(s)."
+            error_message = "Your code is <strong>missing</strong> some closing brackets. It is <strong>missing " + indent / 4 + "</strong> closing bracket(s)."
         }
 
         document.querySelector('#code-ouput').value = output
