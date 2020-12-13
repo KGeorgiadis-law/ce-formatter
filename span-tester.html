@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="style.css">
+<style>
+    div#code-ouput {
+        border: 1px solid grey;
+        resize: both;
+        overflow: auto;
+        width: 20rem;
+        height: 15rem;
+    }
+</style>
+
+<script>
+    "use strict";
+
+    function spanTester(text) {
+        let clean_text = text.split("");
+        let span_collection = {};
+        let span_index = 0;
+
+        let span_start, span_stop;
+
+        clean_text.forEach((character, index) => {
+
+            if (character == "<") {
+                span_index += 1;
+                span_start = index;
+            }
+
+            if (character == ">") {
+                span_stop = index;
+                span_collection[span_index] = [span_start, span_stop];
+                span_index -= 1;
+            }
+        });
+
+        console.log(span_index, span_collection);
+    }
+
+</script>
+<html>
+
+<head>
+    <title>Span tester</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Span tester!</h1>
+        <ul>
+            <li>
+                <div class="inner-container">
+                    <label for="code-input">Your input here:</label>
+                    <textarea name="Your input here" id="code-input" cols="30" rows="10"
+                        onkeyup="javascript:spanTester(this.value)"
+                        placeholder="<helloHello><not helloHi> there!"></textarea>
+                </div>
+            </li>
+            <li>
+                <div class="inner-container">
+                    <label for="code-output">Your output will appear here:</label>
+                    <div name="Your output here" id="code-ouput">test test test</div>
+                </div>
+            </li>
+        </ul>
+        <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
+        <div class="button-container">
+            <button onclick="javascript:seeExample()">See example</button>
+            <button onclick="javascript:selectOutput()">Select output text</button>
+        </div>
+    </div>
+    <footer>
+        <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT
+            License. Source code <a href="https://github.com/KGeorgiadis-law/contract-express-formatter"
+                target="_blank">here</a>.</p>
+    </footer>
+</body>
+
+</html>

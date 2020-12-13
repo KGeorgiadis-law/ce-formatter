@@ -1,75 +1,8 @@
-<style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .inner-container {
-        display: grid;
-    }
-
-    ul {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0;
-    }
-
-    li {
-        margin: 0 20px;
-        list-style: none;
-        padding: 1rem;
-    }
-
-    #error-message {
-        border-radius: 5px;
-        background: tomato;
-        padding: 0.5rem;
-        display: none;
-    }
-
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    textarea {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-size: large
-    }
-
-    footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: salmon;
-        color: black;
-        text-align: center;
-    }
-
-    @media (max-width: 800px) {
-        ul {
-            flex-direction: column;
-        }
-
-        footer {
-            position: relative;
-        }
-
-        footer p {
-            margin: 0;
-        }
-    }
-
-    
-</style>
+<link rel="stylesheet" href="style.css">
 
 <script>
+    "use strict";
+
     function codeFormatter(text) {
 
         // format text appropriately
@@ -93,7 +26,8 @@
                 } else {
                     error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / 4 + " extra</strong> closing bracket(s)."
                 }
-
+            } else if (character == ",") {
+                output += "," + "\n" + " ".repeat(indent); 
             } else {
                 output += character;
             }
@@ -115,6 +49,12 @@
 
     function selectOutput() {
         document.querySelector('#code-ouput').select()
+    }
+
+    function seeExample() {
+        let example_text = "function1(function2(var, var))"
+        document.querySelector('#code-input').textContent = example_text
+        codeFormatter(example_text);        
     }
 </script>
 <html>
@@ -144,7 +84,10 @@
             </li>
         </ul>
         <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
-        <button onclick="javascript:selectOutput()">Select output text</button>
+        <div class="button-container">
+            <button onclick="javascript:seeExample()">See example</button>
+            <button onclick="javascript:selectOutput()">Select output text</button>    
+        </div>
     </div>
     <footer>
         <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT License. Source code <a
