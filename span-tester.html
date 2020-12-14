@@ -4,7 +4,7 @@
 
     function spanTester(text) {
         let clean_text = text.split("");
-
+        let error_message = "";
         let bracket_pairs_indices = {};
 
         let counter = 0;
@@ -23,6 +23,8 @@
                 if (counter > 0) {
                     counter--;
                     bracket_pairs_indices[counter].push(index);
+                } else {
+                    error_message = "Your text contains <strong>extra closing</strong> brackets.";
                 }
             }
         });
@@ -35,12 +37,15 @@
         // flatten bracket_pairs_indices by adding all values to the same array
         Object.values(bracket_pairs_indices).forEach(v => all_indices = all_indices.concat(v))
 
-        let all_spans = [], i = 0;
+        window.all_spans = []; 
+        let i = 0;
 
         while (i < all_indices.length) {
-            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1));
+            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1).replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
             i += 2;
         }
+
+        text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 
         all_spans.forEach((span, index) => {
 
@@ -54,18 +59,12 @@
                 return color;
             }
 
-            text = text.replace(span, `
-                <span id='converted_text_${index}_SPAN' style='background-color:${getRandomColor()}; overflow:inherit'>
-                    ${span.replace("<", "&lt;").replace(">", "&gt;").trim()}
-                </span>`)
+            text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${getRandomColor()}; overflow:inherit'>${span}</span>`)
         })
-
-        // TODO: remove extra spaces around the text, and check what to do with duplicate spans
 
         document.querySelector('#code-ouput').innerHTML = text;
 
 
-        let error_message = "";
 
         // let bracket_difference = opening_brackets.length - closing_brackets.length
 
@@ -95,14 +94,13 @@
         //     error_message = "Your text contains <strong>" + Math.abs(bracket_difference) + " extra closing</strong> brackets.";
         // }
 
-        // if (error_message != "") {
-        //     document.querySelector('#error-message').innerHTML = error_message;
-        //     document.querySelector('#error-message').style.display = 'block';
-        // } else {
-        //     document.querySelector('#error-message').innerHTML = '';
-        //     document.querySelector('#error-message').style.display = 'none';
-        // }
-
+        if (error_message != "") {
+            document.querySelector('#error-message').innerHTML = error_message;
+            document.querySelector('#error-message').style.display = 'block';
+        } else {
+            document.querySelector('#error-message').innerHTML = '';
+            document.querySelector('#error-message').style.display = 'none';
+        }
 
     }
 
