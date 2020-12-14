@@ -1,39 +1,109 @@
 <link rel="stylesheet" href="style.css">
-<style>
-    div#code-ouput {
-        border: 1px solid grey;
-        resize: both;
-        overflow: auto;
-        width: 20rem;
-        height: 15rem;
-    }
-</style>
-
 <script>
     "use strict";
 
     function spanTester(text) {
         let clean_text = text.split("");
-        let span_collection = {};
-        let span_index = 0;
 
-        let span_start, span_stop;
+        let bracket_pairs_indices = {};
+
+        let counter = 0;
 
         clean_text.forEach((character, index) => {
-
             if (character == "<") {
-                span_index += 1;
-                span_start = index;
-            }
+                if (!(counter in bracket_pairs_indices)) {
+                    bracket_pairs_indices[counter] = []
+                };
 
-            if (character == ">") {
-                span_stop = index;
-                span_collection[span_index] = [span_start, span_stop];
-                span_index -= 1;
+                bracket_pairs_indices[counter].push(index);
+
+                counter++;
+
+            } else if (character == ">") {
+                if (counter > 0) {
+                    counter--;
+                    bracket_pairs_indices[counter].push(index);
+                }
             }
         });
 
-        console.log(span_index, span_collection);
+        // // sanity check
+        // console.log(bracket_pairs_indices);
+
+        window.all_indices = [];
+
+        // flatten bracket_pairs_indices by adding all values to the same array
+        Object.values(bracket_pairs_indices).forEach(v => all_indices = all_indices.concat(v))
+
+        let all_spans = [], i = 0;
+
+        while (i < all_indices.length) {
+            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1));
+            i += 2;
+        }
+
+        all_spans.forEach((span, index) => {
+
+            // with thanks to https://stackoverflow.com/a/1484514
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            text = text.replace(span, `
+                <span id='converted_text_${index}_SPAN' style='background-color:${getRandomColor()}; overflow:inherit'>
+                    ${span.replace("<", "&lt;").replace(">", "&gt;").trim()}
+                </span>`)
+        })
+
+        // TODO: remove extra spaces around the text, and check what to do with duplicate spans
+
+        document.querySelector('#code-ouput').innerHTML = text;
+
+
+        let error_message = "";
+
+        // let bracket_difference = opening_brackets.length - closing_brackets.length
+
+        // let span_list = [];
+
+        // if (bracket_difference == 0) {
+
+        //     // do things
+        //     let opening_brackets_index = 0; 
+        //     let closing_brackets_index = 0;
+        //     while (opening_brackets_index < opening_brackets.length) {
+        //         closing_brackets_index--
+
+        //         let start_index = opening_brackets[opening_brackets_index];
+        //         let stop_index = closing_brackets[closing_brackets_index];
+
+        //         span_list.push(text.substring(start_index, stop_index));
+
+        //         opening_brackets_index++
+        //     }
+
+        //     console.log({span_list})
+
+        // } else if (bracket_difference > 0) {
+        //     error_message = "Your text contains <strong>" + bracket_difference + " extra opening</strong> brackets.";
+        // } else if (bracket_difference < 0) {
+        //     error_message = "Your text contains <strong>" + Math.abs(bracket_difference) + " extra closing</strong> brackets.";
+        // }
+
+        // if (error_message != "") {
+        //     document.querySelector('#error-message').innerHTML = error_message;
+        //     document.querySelector('#error-message').style.display = 'block';
+        // } else {
+        //     document.querySelector('#error-message').innerHTML = '';
+        //     document.querySelector('#error-message').style.display = 'none';
+        // }
+
+
     }
 
 </script>
@@ -59,7 +129,7 @@
             <li>
                 <div class="inner-container">
                     <label for="code-output">Your output will appear here:</label>
-                    <div name="Your output here" id="code-ouput">test test test</div>
+                    <div name="Your output here" id="code-ouput"></div>
                 </div>
             </li>
         </ul>
