@@ -27,7 +27,7 @@
                     error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / 4 + " extra</strong> closing bracket(s)."
                 }
             } else if (character == ",") {
-                output += "," + "\n" + " ".repeat(indent); 
+                output += "," + "\n" + " ".repeat(indent - 1); 
             } else {
                 output += character;
             }
