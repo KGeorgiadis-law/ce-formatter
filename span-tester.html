@@ -41,11 +41,11 @@
         let i = 0;
 
         while (i < all_indices.length) {
-            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1).replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
+            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>"));
             i += 2;
         }
 
-        text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+        text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>");
 
         all_spans.forEach((span, index) => {
 
