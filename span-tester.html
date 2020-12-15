@@ -51,11 +51,15 @@
 
             // with thanks to https://stackoverflow.com/a/1484514
             function getRandomColor() {
-                var letters = '0123456789ABCDEF';
-                var color = '#';
-                for (var i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
+                //var letters = '0123456789ABCDEF';
+                //var color = '#';
+                //for (var i = 0; i < 6; i++) {
+                //    color += letters[Math.floor(Math.random() * 16)];
+                //}
+                // with thanks to https://stackoverflow.com/a/11225471
+                var color = 'rgb(' + (Math.floor((256-229)*Math.random()) + 230) + ',' + 
+                                    (Math.floor((256-229)*Math.random()) + 230) + ',' + 
+                                    (Math.floor((256-229)*Math.random()) + 230) + ')';
                 return color;
             }
 
