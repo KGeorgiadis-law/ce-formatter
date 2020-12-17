@@ -51,24 +51,48 @@
 
             // with thanks to https://stackoverflow.com/a/1484514
             function getRandomColor() {
-                //var letters = '0123456789ABCDEF';
-                //var color = '#';
-                //for (var i = 0; i < 6; i++) {
-                //    color += letters[Math.floor(Math.random() * 16)];
-                //}
-                // with thanks to https://stackoverflow.com/a/11225471
-                var color = 'rgb(' + (Math.floor((256-229)*Math.random()) + 200) + ',' + 
-                                    (Math.floor((256-229)*Math.random()) + 200) + ',' + 
-                                    (Math.floor((256-229)*Math.random()) + 200) + ')';
-                return color;
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                
+                // functions to determine whether background is light or dark
+                // https://awik.io/determine-color-bright-dark-using-javascript/
+                
+                // convert HEX to RGB: http://gist.github.com/983661
+                color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, '$&$&'));
+
+                let r = color >> 16;
+                let g = color >> 8 & 255;
+                let b = color & 255;
+                
+                // HSP equation from http://alienryderflex.com/hsp.html
+                let hsp = Math.sqrt(
+                    0.299 * (r * r) +
+                    0.587 * (g * g) +
+                    0.114 * (b * b)
+                );
+
+                // Using the HSP value, determine whether the color is light or dark
+                let color_is_bright = hsp > 127.5
+                
+                return (color, color_is_bright);
             }
 
-            text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${getRandomColor()}; overflow:inherit'>${span}</span>`)
+            let colour, color_is_bright, text_colour;
+            [colour, color_is_bright] = getRandomColor();
+    
+            if (color_is_bright) {
+                text_colour = 'white';
+            } else {
+                text_colour = 'black';
+            }
+            
+            text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${colour}; color:${text_colour}; overflow:inherit'>${span}</span>`)
         })
 
         document.querySelector('#code-ouput').innerHTML = text;
-
-
 
         // let bracket_difference = opening_brackets.length - closing_brackets.length
 
@@ -105,7 +129,6 @@
             document.querySelector('#error-message').innerHTML = '';
             document.querySelector('#error-message').style.display = 'none';
         }
-
     }
 
 </script>
