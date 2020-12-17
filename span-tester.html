@@ -41,11 +41,11 @@
         let i = 0;
 
         while (i < all_indices.length) {
-            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>"));
+            all_spans.push(text.substring(all_indices[i], all_indices[i + 1] + 1).replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>").replaceAll(" ", `<span class="space-span"> </span>`));
             i += 2;
         }
 
-        text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>");
+        text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>").replaceAll(" ", `<span class="space-span"> </span>`);
 
         all_spans.forEach((span, index) => {
 
@@ -92,8 +92,6 @@
             text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${colour}; color:${text_colour}; overflow:inherit'>${span}</span>`)
         })
         
-        text = text.replaceAll(" ", `<span class="space-span"> </span>`);
-
         document.querySelector('#code-ouput').innerHTML = text;
 
         // let bracket_difference = opening_brackets.length - closing_brackets.length
