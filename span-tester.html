@@ -91,6 +91,8 @@
             
             text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${colour}; color:${text_colour}; overflow:inherit'>${span}</span>`)
         })
+        
+        text = text.replaceAll(" ", `<span class="space-span"> </span>`);
 
         document.querySelector('#code-ouput').innerHTML = text;
 
