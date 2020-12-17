@@ -61,11 +61,11 @@
                 // https://awik.io/determine-color-bright-dark-using-javascript/
                 
                 // convert HEX to RGB: http://gist.github.com/983661
-                color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, '$&$&'));
+                let rgb_color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, '$&$&'));
 
-                let r = color >> 16;
-                let g = color >> 8 & 255;
-                let b = color & 255;
+                let r = rgb_color >> 16;
+                let g = rgb_color >> 8 & 255;
+                let b = rgb_color & 255;
                 
                 // HSP equation from http://alienryderflex.com/hsp.html
                 let hsp = Math.sqrt(
@@ -80,10 +80,10 @@
                 return [color, color_is_bright];
             }
 
-            let colour, color_is_bright, text_colour;
-            [colour, color_is_bright] = getRandomColor();
+            let colour, colour_is_bright, text_colour;
+            [colour, colour_is_bright] = getRandomColor();
     
-            if (color_is_bright) {
+            if (colour_is_bright) {
                 text_colour = 'white';
             } else {
                 text_colour = 'black';
