@@ -84,9 +84,9 @@
             [colour, colour_is_bright] = getRandomColor();
     
             if (colour_is_bright) {
-                text_colour = 'white';
-            } else {
                 text_colour = 'black';
+            } else {
+                text_colour = 'white';
             }
             
             text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${colour}; color:${text_colour}; overflow:inherit'>${span}</span>`)
