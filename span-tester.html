@@ -2,6 +2,24 @@
 <script>
     "use strict";
 
+    //with thanks to https://gomakethings.com/how-to-show-and-hide-elements-with-vanilla-javascript/
+    // Show an element
+    var show = function (elem) {
+        elem.classList.remove('is-hidden');
+    };
+
+    // Hide an element
+    var hide = function (elem) {
+        elem.classList.remove('is-hidden');
+    };
+
+    // Toggle element visibility
+    var toggle = function (id) {
+        let elem = document.querySelector('#' + id);
+        elem.classList.toggle('is-hidden');
+    };
+
+
     function spanTester(text) {
         let clean_text = text.split("");
         let error_message = "";
@@ -37,7 +55,7 @@
         // flatten bracket_pairs_indices by adding all values to the same array
         Object.values(bracket_pairs_indices).forEach(v => all_indices = all_indices.concat(v))
 
-        window.all_spans = []; 
+        window.all_spans = [];
         let i = 0;
 
         while (i < all_indices.length) {
@@ -46,6 +64,8 @@
         }
 
         text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br/>").replaceAll(" ", `<span class="space-span"> </span>`);
+
+        let span_selection = ''
 
         all_spans.forEach((span, index) => {
 
@@ -56,17 +76,17 @@
                 for (var i = 0; i < 6; i++) {
                     color += letters[Math.floor(Math.random() * 16)];
                 }
-                
+
                 // functions to determine whether background is light or dark
                 // https://awik.io/determine-color-bright-dark-using-javascript/
-                
+
                 // convert HEX to RGB: http://gist.github.com/983661
                 let rgb_color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, '$&$&'));
 
                 let r = rgb_color >> 16;
                 let g = rgb_color >> 8 & 255;
                 let b = rgb_color & 255;
-                
+
                 // HSP equation from http://alienryderflex.com/hsp.html
                 let hsp = Math.sqrt(
                     0.299 * (r * r) +
@@ -76,51 +96,48 @@
 
                 // Using the HSP value, determine whether the color is light or dark
                 let color_is_bright = hsp > 127.5
-                
+
                 return [color, color_is_bright];
             }
 
             let colour, colour_is_bright, text_colour;
             [colour, colour_is_bright] = getRandomColor();
-    
+
             if (colour_is_bright) {
                 text_colour = 'black';
             } else {
                 text_colour = 'white';
             }
-            
-            text = text.replaceAll(span, `<span id='converted_text_${index}_SPAN' style='background-color:${colour}; color:${text_colour}; overflow:inherit'>${span}</span>`)
+
+            text = text.replaceAll(span, `
+                <span 
+                    class="ce-span" 
+                    id='converted_text_${index}_SPAN' 
+                    style='background-color:${colour}; color:${text_colour}; overflow:inherit'
+                >
+                    ${span}
+                </span>`)
+
+            let span_selection_string = `
+                <span class="checkbox-group">
+                    <input type="checkbox" id="converted_text_${index}" 
+                        name="converted_text_${index}" 
+                        onclick="javascript:toggle('converted_text_${index}_SPAN')"
+                    >
+                        <label for="converted_text_${index}" style='background-color:${colour}; color:${text_colour}; overflow:inherit'>${span}</label>
+                    </input>
+                </span>
+            `
+
+            span_selection += span_selection_string;
+
+            // TODO:
+            // Multiple checkboxes appear for the same span. Fix this.
+
         })
-        
+
         document.querySelector('#code-ouput').innerHTML = text;
-
-        // let bracket_difference = opening_brackets.length - closing_brackets.length
-
-        // let span_list = [];
-
-        // if (bracket_difference == 0) {
-
-        //     // do things
-        //     let opening_brackets_index = 0; 
-        //     let closing_brackets_index = 0;
-        //     while (opening_brackets_index < opening_brackets.length) {
-        //         closing_brackets_index--
-
-        //         let start_index = opening_brackets[opening_brackets_index];
-        //         let stop_index = closing_brackets[closing_brackets_index];
-
-        //         span_list.push(text.substring(start_index, stop_index));
-
-        //         opening_brackets_index++
-        //     }
-
-        //     console.log({span_list})
-
-        // } else if (bracket_difference > 0) {
-        //     error_message = "Your text contains <strong>" + bracket_difference + " extra opening</strong> brackets.";
-        // } else if (bracket_difference < 0) {
-        //     error_message = "Your text contains <strong>" + Math.abs(bracket_difference) + " extra closing</strong> brackets.";
-        // }
+        document.querySelector('#span-selection').innerHTML = span_selection;
 
         if (error_message != "") {
             document.querySelector('#error-message').innerHTML = error_message;
@@ -159,6 +176,11 @@
             </li>
         </ul>
         <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
+        <h3>Your spans will be listed below. Click on them to toggle visibility</h3>
+        <div class="inner-container" id="span-list" title="Spans appear here">
+            <div id="span-selection">
+            </div>
+        </div>
         <div class="button-container">
             <button onclick="javascript:seeExample()">See example</button>
             <button onclick="javascript:selectOutput()">Select output text</button>
@@ -166,8 +188,7 @@
     </div>
     <footer>
         <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT
-            License. Source code <a href="https://github.com/KGeorgiadis-law/contract-express-formatter"
-                target="_blank">here</a>.</p>
+            License. Source code <a href="https://github.com/KGeorgiadis-law/ce-formatter" target="_blank">here</a>.</p>
     </footer>
 </body>
 

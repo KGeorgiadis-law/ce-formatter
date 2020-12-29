@@ -26,6 +26,14 @@ div#code-ouput {
     height: 15rem;
 }
 
+.ce-span {
+	display:inline;
+}
+
+.ce-span.is-hidden {
+	display: none;
+}
+
 button {
     margin: 0.5rem;
 }
@@ -47,6 +55,17 @@ li {
     background: tomato;
     padding: 0.5rem;
     display: none;
+}
+
+#span-list {
+    border-radius: 5px;
+    background: MediumSeaGreen;
+    padding: 0.5rem;
+    margin: 1rem;
+}
+
+span.checkbox-group {
+    margin: 0.5rem;
 }
 
 body {
