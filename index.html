@@ -15,19 +15,35 @@
         let output = "";
         let error_message = "";
 
+        let inside_quote = false;
+
         clean_text.forEach(character => {
-            if (character == "(") {
-                indent += 4;
-                output += "(" + "\n" + " ".repeat(indent);
-            } else if (character == ")") {
-                indent -= 4;
-                if (indent >= 0) {
-                    output += "\n" + " ".repeat(indent) + ")";
+
+            // don't indent if inside quotes
+            if (character == "\"") {
+                if (inside_quote) {
+                    inside_quote = false;
                 } else {
-                    error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / 4 + " extra</strong> closing bracket(s)."
+                    inside_quote = true;
                 }
-            } else if (character == ",") {
-                output += "," + "\n" + " ".repeat(indent - 1); 
+            }
+
+            if (!(inside_quote)) {
+                if (character == "(") {
+                    indent += 4;
+                    output += "(" + "\n" + " ".repeat(indent);
+                } else if (character == ")") {
+                    indent -= 4;
+                    if (indent >= 0) {
+                        output += "\n" + " ".repeat(indent) + ")";
+                    } else {
+                        error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / 4 + " extra</strong> closing bracket(s)."
+                    }
+                } else if (character == ",") {
+                    output += "," + "\n" + " ".repeat(indent - 1);
+                } else {
+                    output += character;
+                }
             } else {
                 output += character;
             }
@@ -54,7 +70,7 @@
     function seeExample() {
         let example_text = "function1(function2(var, var))"
         document.querySelector('#code-input').textContent = example_text
-        codeFormatter(example_text);        
+        codeFormatter(example_text);
     }
 </script>
 <html>
@@ -86,12 +102,12 @@
         <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
         <div class="button-container">
             <button onclick="javascript:seeExample()">See example</button>
-            <button onclick="javascript:selectOutput()">Select output text</button>    
+            <button onclick="javascript:selectOutput()">Select output text</button>
         </div>
     </div>
     <footer>
-        <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT License. Source code <a
-                href="https://github.com/KGeorgiadis-law/ce-formatter" target="_blank">here</a>.</p>
+        <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT
+            License. Source code <a href="https://github.com/KGeorgiadis-law/ce-formatter" target="_blank">here</a>.</p>
     </footer>
 </body>
 
