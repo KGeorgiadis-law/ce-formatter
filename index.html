@@ -7,17 +7,19 @@
 
         // format text appropriately
 
-        // get rid of all extra spaces, newlines, tabs
-        let clean_text = text.replace(/[\n\t]/, "").split("");
+        let clean_text = text.split("");
 
         // set the indent level
         let indent = 0;
+        let indent_space = 2;
         let output = "";
         let error_message = "";
 
         let inside_quote = false;
 
-        clean_text.forEach(character => {
+
+
+        clean_text.forEach((character, index) => {
 
             // don't indent if inside quotes
             if (character == "\"") {
@@ -30,17 +32,41 @@
 
             if (!(inside_quote)) {
                 if (character == "(") {
-                    indent += 4;
+                    indent += indent_space;
                     output += "(" + "\n" + " ".repeat(indent);
                 } else if (character == ")") {
-                    indent -= 4;
+                    indent -= indent_space;
                     if (indent >= 0) {
                         output += "\n" + " ".repeat(indent) + ")";
                     } else {
-                        error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / 4 + " extra</strong> closing bracket(s)."
+                        error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / indent_space + " extra</strong> closing bracket(s)."
                     }
                 } else if (character == ",") {
                     output += "," + "\n" + " ".repeat(indent - 1);
+
+                } else if (character == " ") {
+                    // check if the last word was one which should trigger linebreak
+                    let text_so_far = text.substring(0, index);
+                    let last_space_match = text_so_far.match(/\s(?!.*\s)/);
+                    if (last_space_match) {
+                        let last_space_index = last_space_match["index"];
+                        let last_word = text.substring(last_space_index + 1, index).trim();
+                        if (last_word == "then") {
+                            indent += indent_space;
+                            output += "\n" + " ".repeat(indent)
+                        } else if (last_word == "else") {
+                            indent -= indent_space;
+                            if (indent >= 0) {
+                                output += "\n" + " ".repeat(indent);
+                            } else {
+                                error_message = "Your code has a 'then' statement but is missing an 'else'."
+                            }
+                        } else {
+                            output += character;
+                        }
+                    } else {
+                        output += character;
+                    }
                 } else {
                     output += character;
                 }
@@ -50,7 +76,7 @@
         })
 
         if (indent > 0) {
-            error_message = "Your code is <strong>missing</strong> some closing brackets. It is <strong>missing " + indent / 4 + "</strong> closing bracket(s)."
+            error_message = "Your code is <strong>missing</strong> some closing brackets. It is <strong>missing " + indent / indent_space + "</strong> closing bracket(s)."
         }
 
         document.querySelector('#code-ouput').value = output
@@ -69,7 +95,7 @@
 
     function seeExample() {
         let example_text = "function1(function2(var, var))"
-        document.querySelector('#code-input').textContent = example_text
+        document.querySelector('#code-input').value = example_text
         codeFormatter(example_text);
     }
 </script>
