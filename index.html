@@ -7,17 +7,16 @@
 
         // format text appropriately
 
-        let clean_text = text.split("");
+        let clean_text = text.replace("\n", " ").split("");
 
         // set the indent level
         let indent = 0;
-        let indent_space = 2;
+        let indent_space = parseInt(document.getElementById("indent-input").value);
         let output = "";
         let error_message = "";
 
         let inside_quote = false;
-
-
+        let bracket_count = 0;
 
         clean_text.forEach((character, index) => {
 
@@ -30,56 +29,84 @@
                 }
             }
 
+            let add_normal_output = true
+
             if (!(inside_quote)) {
+                // opening bracket should cause line break and indent
                 if (character == "(") {
                     indent += indent_space;
                     output += "(" + "\n" + " ".repeat(indent);
+                    bracket_count++;
+                    add_normal_output = false;
+                    // closing bracket should cause line break and de-indent
                 } else if (character == ")") {
                     indent -= indent_space;
                     if (indent >= 0) {
                         output += "\n" + " ".repeat(indent) + ")";
+                        bracket_count--;
+                        add_normal_output = false;
                     } else {
                         error_message = "Your code has <strong>too many</strong> closing brackets. It has <strong>" + Math.abs(indent) / indent_space + " extra</strong> closing bracket(s)."
                     }
+
+                    // comma should cause a line break but not an indent
                 } else if (character == ",") {
                     output += "," + "\n" + " ".repeat(indent - 1);
+                    add_normal_output = false;
 
+                    // on space, check next and last words for then/else
+                    // if doesn't cause a line break
                 } else if (character == " ") {
-                    // check if the last word was one which should trigger linebreak
+
+                    // check if the last word was one which should trigger line break
                     let text_so_far = text.substring(0, index);
                     let last_space_match = text_so_far.match(/\s(?!.*\s)/);
                     if (last_space_match) {
                         let last_space_index = last_space_match["index"];
-                        let last_word = text.substring(last_space_index + 1, index).trim();
-                        if (last_word == "then") {
+                        let previous_word = text.substring(last_space_index + 1, index).trim();
+                        if (previous_word == "then") {
                             indent += indent_space;
                             output += "\n" + " ".repeat(indent)
-                        } else if (last_word == "else") {
-                            indent -= indent_space;
+                            add_normal_output = false;
+                        } else if (previous_word == "else") {
+                            indent += indent_space;
                             if (indent >= 0) {
                                 output += "\n" + " ".repeat(indent);
+                                add_normal_output = false;
                             } else {
                                 error_message = "Your code has a 'then' statement but is missing an 'else'."
                             }
-                        } else {
-                            output += character;
                         }
-                    } else {
-                        output += character;
                     }
-                } else {
-                    output += character;
+
+                    // check if the next word is one which should trigger line break
+                    let text_to_go = text.substring(index + 1, clean_text.length)
+                    let next_space_match = text_to_go.match(/\s/);
+                    if (next_space_match) {
+                        let next_space_index = next_space_match["index"];
+                        let next_word = text_to_go.substring(0, next_space_index).trim();
+                        if (next_word == "else") {
+                            indent -= indent_space;
+                            if (indent >= 0) {
+                                output += "\n" + " ".repeat(indent);
+                                add_normal_output = false;
+                            } else {
+                                error_message = "Your code has too many else statements.";
+                            }
+                        }
+                    }
                 }
-            } else {
+            }
+            if (add_normal_output) {
                 output += character;
             }
         })
 
-        if (indent > 0) {
-            error_message = "Your code is <strong>missing</strong> some closing brackets. It is <strong>missing " + indent / indent_space + "</strong> closing bracket(s)."
+        if (bracket_count > 0) {
+            error_message = "Your code is <strong>missing</strong> closing brackets. It is <strong>missing " + bracket_count + "</strong> closing bracket(s)."
         }
 
-        document.querySelector('#code-ouput').value = output
+        document.querySelector('#code-ouput').value = output;
         if (error_message != "") {
             document.querySelector('#error-message').innerHTML = error_message;
             document.querySelector('#error-message').style.display = 'block';
@@ -104,15 +131,31 @@
 <head>
     <title>Code indenter</title>
     <meta charset="utf-8">
+    <meta name="color-scheme" content="dark light">
 </head>
 
 <body>
     <div class="container">
         <h1>CE code indenter!</h1>
+        <div class="subcaption">
+            <p>
+                <em style="text-align: center;">
+                    Make your CE code easier to read.<br />
+                    Paste your code in the input box on the left.<br />
+                    The formatter will add linebreaks and indents to make it easier to read.<br />
+                    It will also notify you if your code is missing certain elements and allow you to look up the functions it detects.
+                </em>
+            </p>
+        </div>
+        <div class="inner-container">
+            <label for="indent-input">Indent length:</label>
+            <input type="number" name="indent-input" id="indent-input" value="4" min="1" max="10"
+                onchange="javascript:codeFormatter(document.getElementById('code-input').value)" />
+        </div>
         <ul>
             <li>
                 <div class="inner-container">
-                    <label for="code-input">Your input here:</label>
+                    <label for="code-input">Your business rule/computable here:</label>
                     <textarea name="Your input here" id="code-input" cols="30" rows="10"
                         onkeyup="javascript:codeFormatter(this.value)"
                         placeholder="function1(function2(var))"></textarea>
@@ -121,7 +164,7 @@
             <li>
                 <div class="inner-container">
                     <label for="code-output">Your output will appear here:</label>
-                    <textarea name="Your output here" id="code-ouput" cols="30" rows="10" readonly></textarea>
+                    <textarea name="Your output will appear here" id="code-ouput" cols="30" rows="10" readonly></textarea>
                 </div>
             </li>
         </ul>
@@ -133,7 +176,7 @@
     </div>
     <footer>
         <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT
-            License. Source code <a href="https://github.com/KGeorgiadis-law/ce-formatter" target="_blank">here</a>.</p>
+            License. Source code and feedback on <a href="https://github.com/KGeorgiadis-law/ce-formatter" target="_blank">github</a>.</p>
     </footer>
 </body>
 

@@ -8,6 +8,11 @@
     display: grid;
 }
 
+div.subcaption {
+    max-width: 35rem;
+    text-align: center;
+}
+
 .button-container {
     display: flex;
     flex-direction: row;
@@ -92,6 +97,10 @@ footer {
     text-align: center;
 }
 
+footer a {
+    color:black;
+}
+
 @media (max-width: 800px) {
     ul {
         flex-direction: column;
@@ -103,6 +112,18 @@ footer {
 
     footer p {
         margin: 0;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color:lightgrey;
+    }
+
+    input, textarea {
+        background-color:lightgrey;
+        color:black;
     }
 }
 
