@@ -23,12 +23,21 @@ span.space-span {
     border: 1px solid blue;   
 }
 
-div#code-ouput {
+div#code-output {
     border: 1px solid grey;
     resize: both;
     overflow: auto;
     width: 20rem;
     height: 15rem;
+    background-color: white;
+}
+
+.output-span {
+    cursor:default;
+}
+
+.output-span:hover {
+    filter:drop-shadow(2px 4px 6px black)
 }
 
 .ce-span {
@@ -88,10 +97,11 @@ textarea {
 }
 
 footer {
-    position: fixed;
+    position: relative;
     left: 0;
     bottom: 0;
     width: 100%;
+    height: 2em;
     background-color: lightpink;
     color: black;
     text-align: center;
@@ -115,13 +125,14 @@ footer a {
     }
 }
 
+
 @media (prefers-color-scheme: dark) {
     body {
         background-color: black;
         color:lightgrey;
     }
 
-    input, textarea {
+    input, textarea, #code-output {
         background-color:lightgrey;
         color:black;
     }
