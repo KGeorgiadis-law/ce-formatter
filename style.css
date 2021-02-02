@@ -27,7 +27,7 @@ div#code-output {
     border: 1px solid grey;
     resize: both;
     overflow: auto;
-    width: 20rem;
+    width: 30rem;
     height: 15rem;
     background-color: white;
 }
