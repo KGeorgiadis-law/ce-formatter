@@ -132,6 +132,7 @@
             document.querySelector('#code-output').value = output;
         } else {
             document.querySelector('#code-output').innerHTML = output;
+            document.querySelector('#code-output').style.display = 'table';
         }
         if (error_message != "") {
             document.querySelector('#error-message').innerHTML = error_message;
