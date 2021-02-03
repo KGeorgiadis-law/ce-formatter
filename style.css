@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 95%;
 }
 
 .inner-container {
@@ -27,7 +28,7 @@ div#code-output {
     border: 1px solid grey;
     resize: both;
     overflow: auto;
-    width: 30rem;
+    min-width: 30rem;
     height: 15rem;
     background-color: white;
 }
@@ -96,18 +97,18 @@ textarea {
     font-size: large
 }
 
-header {
-    /* position: relative; */
-    /* left: 0;
-    bottom: 0; */
+footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
     width: 100%;
-    height: 2em;
+    height: 5%;
     background-color: lightpink;
     color: black;
     text-align: center;
 }
 
-header a {
+footer a {
     color:black;
 }
 
