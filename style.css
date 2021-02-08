@@ -20,8 +20,13 @@ div.subcaption {
     align-items: center;
 }
 
-span.space-span {
-    border: 1px solid blue;   
+span.ce-span {
+    border-radius: 3px;   
+    cursor: pointer;
+}
+
+span.ce-span:hover {
+    filter:opacity(0.8);   
 }
 
 div#code-output {
@@ -41,11 +46,11 @@ div#code-output {
     filter:drop-shadow(2px 4px 6px black)
 }
 
-.ce-span {
+.ce-span .ce-span-text {
 	display:inline;
 }
 
-.ce-span.is-hidden {
+.ce-span-text.is-hidden {
 	display: none;
 }
 
@@ -111,6 +116,47 @@ footer {
 footer a {
     color:black;
 }
+
+/* tooltip CSS with thanks to W3Schools https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    opacity: 0.6;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+    margin-top: 1rem;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+
 
 @media (max-width: 800px) {
     ul {
