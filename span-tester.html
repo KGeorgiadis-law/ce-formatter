@@ -28,10 +28,8 @@
 
                 output += `<span 
                     class='ce-span'
-                    onclick='javascript:event.stopPropagation(); toggleSpan(this)' 
-                    style='background-color:hsl(${360 * Math.random()}, 50%,70%)' + "'>
-                    <span class="ce-span-text">
-                    &lt;`;
+                    onclick='javascript:event.stopPropagation(); toggleSpan(this)'
+                    style='background-color:hsl(${360 * Math.random()}, 50%,70%)' + "'> <span class="ce-span-text">&lt;`;
 
             } else if (character == ">") {
                 if (counter > 0) {
@@ -66,6 +64,12 @@
         inner_text.classList.toggle('is-hidden');
     }
 
+    function seeExample() {
+        let text = "<VAR1Hello><NOT VAR1Hi> world!";
+        spanTester(text);
+        document.getElementById('code-input').value = text
+    }
+
 </script>
 <html>
 
@@ -77,27 +81,34 @@
 <body>
     <div class="container">
         <h1>Span tester!</h1>
+        <div class="subcaption">
+            <p>
+                <em style="text-align: center;">
+                    Make sense of your CE spans.<br />
+                    Paste your template text, including CE markup in the input box on the left. The formatter will colour code all spans.<br />
+                    Click on a span to hide it and view your text without it. Click on it again to show it.
+                </em>
+            </p>
+        </div>
+        <div class="button-container">
+            <button onclick="javascript:seeExample()">See example</button>
+        </div>
         <ul>
             <li>
                 <div class="inner-container">
                     <label for="code-input">Your input here:</label>
                     <textarea name="Your input here" id="code-input" cols="30" rows="10"
-                        onkeyup="javascript:spanTester(this.value)"
-                        placeholder="<helloHello><not helloHi> there!"></textarea>
+                        onkeyup="javascript:spanTester(this.value)"></textarea>
                 </div>
             </li>
             <li>
                 <div class="inner-container">
                     <label for="code-output">Your output will appear here:</label>
-                    <div name="Your output here" id="code-output"></div>
+                    <div name="Your output here" id="code-output" class="ce-span-output"></div>
                 </div>
             </li>
         </ul>
         <p id="error-message" title="Error message will appear here" aria-label="Error message"></p>
-        <!-- <div class="button-container">
-            <button onclick="javascript:seeExample()">See example</button>
-            <button onclick="javascript:selectOutput()">Select output text</button>
-        </div> -->
     </div>
     <footer>
         <p>Made by <a href="https://twitter.com/kgeorgiadis_law" target="_blank">Konstantinos Georgiadis</a> under MIT

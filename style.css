@@ -46,12 +46,17 @@ div#code-output {
     filter:drop-shadow(2px 4px 6px black)
 }
 
-.ce-span .ce-span-text {
+.ce-span, .ce-span-text {
 	display:inline;
+    min-width: 2px;
 }
 
 .ce-span-text.is-hidden {
 	display: none;
+}
+
+.ce-span-output {
+    white-space: break-spaces;
 }
 
 button {
