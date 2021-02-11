@@ -115,11 +115,17 @@ footer {
     height: 5%;
     background-color: lightpink;
     color: black;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 footer a {
     color:black;
+}
+
+footer p {
+    margin: 0;
 }
 
 /* tooltip CSS with thanks to W3Schools https://www.w3schools.com/css/css_tooltip.asp */
